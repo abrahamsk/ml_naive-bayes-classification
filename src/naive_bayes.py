@@ -24,3 +24,9 @@ argmax f(z) = argmax log f(z)
 we have:
 classNB(x)=argmax[(class)∏P(xi |class)]
 """
+
+# Use NB to classify instances in test set
+# training = np.loadtxt("output/training.csv")
+# test = np.loadtxt("output/test.csv")
+# means = np.loadtxt("output/means.csv")
+# std_devs = np.loadtxt("output/std_devs.csv")

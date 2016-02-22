@@ -42,35 +42,17 @@ df_training = df_training.reset_index(drop=True)
 frames_test = [df_pos[906:1812], df_neg[1394:2788]]
 df_test = pd.concat(frames_test)
 df_test = df_test.reset_index(drop=True)
-# print df_training.shape  # (2300, 58)
+# print df_training  # (2300, 58)
 # print df_test.shape  # (2300, 58)
+
+# convert dataframes into a numpy matrix
+X_training = df_training.as_matrix().astype(np.float)
+X_test = df_test.as_matrix().astype(np.float)
 
 ###########################################################################
 
 # shuffle training data #
 # frac=1 means return all rows in random order
-df_training = df_training.sample(frac=1).reset_index(drop=True)
+# df_training = df_training.sample(frac=1).reset_index(drop=True)
 
 ###########################################################################
-#
-# # convert dataframe into a numpy matrix
-# X = df_training.as_matrix().astype(np.float)
-# # scale data #
-# # preprocess everything in training data matrix except the last column (1 or 0 to identify spam or not)
-# # then concat the identifying column to the preprocessed training data
-# scaler = preprocessing.StandardScaler()
-# X_to_scale = X[:,:57].copy()
-# X_scaled = scaler.fit_transform(X_to_scale)
-# X_col = X[:,57]
-# X_concat = np.concatenate((X_scaled, X_col[None].T), axis=1)
-# np.savetxt("/Users/katieabrahams/PycharmProjects/machinelearningHW4/src/sklearn_svm/numpy_train.csv", X_concat,
-#            delimiter=",")
-#
-# # Scale test data using standardization parameters from training data
-# X_test = df_test.as_matrix().astype(np.float)
-# X_test_to_scale = X_test[:,:57].copy()
-# X_test_scaled = scaler.fit_transform(X_test_to_scale)
-# X_test_col = X_test[:,57]
-# X_test_concat = np.concatenate((X_test_scaled, X_test_col[None].T), axis=1)
-# np.savetxt("/Users/katieabrahams/PycharmProjects/machinelearningHW4/src/sklearn_svm/numpy_test.csv", X_test_concat,
-#            delimiter=",")
