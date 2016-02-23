@@ -44,16 +44,11 @@ prior_prob_not_spam = count_not_spam/len(X_training)  # 0.6060
 # B)
 # For each of the 57 features, compute the mean and standard deviation
 # in the training set of the values given each class.
-means = np.mean(X_training[:,0:57], axis = 0)
-std_devs = np.std(X_training[:,0:57], axis = 0)
-
+# means = np.mean(X_training[:,0:57], axis = 0)
+# std_devs = np.std(X_training[:,0:57], axis = 0)
+# >> moved to input.py
 #######################################################################
 
-# Save to file
-np.savetxt("output/training.csv", X_training, delimiter=",")
-np.savetxt("output/test.csv", X_test, delimiter=",")
-np.savetxt("output/means.csv", means, delimiter=",")
-np.savetxt("output/std_devs.csv", std_devs, delimiter=",")
 
 
 

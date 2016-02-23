@@ -36,13 +36,20 @@ df_neg = (df.loc[df[57] == 0])
 frames_training = [df_pos[0:906], df_neg[0:1394]]
 df_training = pd.concat(frames_training)
 df_training = df_training.reset_index(drop=True)
-# split in pos and neg get means and standard deviations
-df_train_pos = (df.loc[df_training[57] == 1])
-df_train_neg = (df.loc[df_training[57] == 0])
+
+# split in pos and neg to get means and standard deviations
+df_train_pos = (df_training.loc[df_training[57] == 1])
+df_train_neg = (df_training.loc[df_training[57] == 0])
 # For each of the 57 features, compute the mean and standard deviation
 # in the training set of the values given each class.
-means = df_train_pos[:,0:57].mean(axis = 0)
-std_devs = df_train_neg[:,0:57].std(axis = 0)
+train_pos_intermed = df_train_pos.as_matrix().astype(np.float)
+train_neg_intermed = df_train_neg.as_matrix().astype(np.float)
+# positive stats
+pos_means_training = np.mean(train_pos_intermed[:,0:57], axis = 0)
+pos_std_devs_training = np.std(train_pos_intermed[:,0:57], axis = 0)
+# negative stats
+neg_means_training = np.mean(train_neg_intermed[:,0:57], axis = 0)
+neg_std_devs_training = np.std(train_neg_intermed[:,0:57], axis = 0)
 
 # test data
 frames_test = [df_pos[906:1812], df_neg[1394:2788]]

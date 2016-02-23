@@ -68,7 +68,10 @@ def predict_all():
     classes = []
     for i in range(len(X_test_features)):
         prediction = []
-        sum_prob = [gaussian_probability(X_test_features[i][j], means[i], std_devs[i]) for j in X_test_features[i][j]]
+        sum_probabilities_pos = [gaussian_probability(X_test_features[i][j], pos_means_training[i], pos_std_devs_training[i]) for j
+                                 in X_test_features[i][j]]
+        sum_probabilities_neg = [gaussian_probability(X_test_features[i][j], neg_means_training[i], pos_means_training[i]) for j
+                                 in X_test_features[i][j]]
 
         predict_spam = np.log10(prior_prob_spam) + np.log10(
             gaussian_probability(X_test_features[i], means[i], std_devs[i]))
