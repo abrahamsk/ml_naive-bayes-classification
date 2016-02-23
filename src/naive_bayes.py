@@ -8,8 +8,7 @@
 
 from probabilistic_model import *
 import math
-import timing
-
+# import timing
 
 """
 3.
@@ -28,6 +27,7 @@ we have:
 classNB(x)=argmax[(class)∏P(xi |class)]
 """
 
+
 ###########
 # functions
 ###########
@@ -43,7 +43,7 @@ def gaussian_probability(x, mean, std_dev):
     :param std_dev:
     :return:
     """
-    if(std_dev == 0):
+    if (std_dev == 0):
         std_dev = .01
     exp = math.exp(-(math.pow(x - mean, 2) / (2 * math.pow(std_dev, 2))))
     return (1 / (math.sqrt(2 * math.pi) * std_dev)) * exp
@@ -68,16 +68,16 @@ def predict_all():
     classes = []
     for i in range(len(X_test_features)):
         prediction = []
-        sum_probabilities_pos = [gaussian_probability(X_test_features[i][j], pos_means_training[i], pos_std_devs_training[i]) for j
-                                 in X_test_features[i][j]]
-        sum_probabilities_neg = [gaussian_probability(X_test_features[i][j], neg_means_training[i], pos_means_training[i]) for j
-                                 in X_test_features[i][j]]
+        sum_probabilities_pos = [
+            np.log10(gaussian_probability(X_test_features[i][j], pos_means_training[i], pos_std_devs_training[i])) for j
+            in X_test_features[i][j]]
+        sum_probabilities_neg = [
+            np.log10(gaussian_probability(X_test_features[i][j], neg_means_training[i], pos_means_training[i])) for j
+            in X_test_features[i][j]]
 
-        predict_spam = np.log10(prior_prob_spam) + np.log10(
-            gaussian_probability(X_test_features[i], means[i], std_devs[i]))
+        predict_spam = np.log10(prior_prob_spam) * sum_probabilities_pos
 
-        predict_not_spam = np.log10(prior_prob_not_spam) + np.log10(
-            gaussian_probability(X_test_features[i], means[i], std_devs[i]))
+        predict_not_spam = np.log10(prior_prob_not_spam) * sum_probabilities_neg
 
         prediction.append(predict_spam, predict_not_spam)
         class_nb = max(prediction)
@@ -91,3 +91,13 @@ def predict_all():
 # 		result = predict(summaries, testSet[i])
 # 		predictions.append(result)
 # 	return predictions
+
+#######################################################################
+
+def main():
+    # predict classes for spam test data
+    predict_all()
+
+
+if __name__ == "__main__":
+    main()
