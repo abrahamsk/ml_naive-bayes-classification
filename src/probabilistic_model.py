@@ -8,7 +8,6 @@
 
 from __future__ import division
 from input import *
-import timing
 
 """
 2.
@@ -17,19 +16,10 @@ As described in part 1, P(1) should be about 0.4.
 
 B) For each of the 57 features, compute the mean and standard deviation in the training set
 of the values given each class.
+
+Training data information includes mean and std dev for each of the 57 attributes
+and 2 possible class values, for a total of 114 (57*2)
 """
-
-############
-# functions
-############
-
-# returns the last index of the row if it is 1 (i.e. spam)
-def pos_spam(row):
-    return row[57] == 1
-
-# returns the last index of the row if it is 0 (i.e. not spam)
-def neg_not_spam(row):
-    return row[57] == 0
 
 #######################################################################
 
@@ -45,6 +35,7 @@ for row in X_training:
     else:
         count_not_spam += 1
 # divide num spam instances by number of rows in training
+# to calculate class probabilities for training data
 prior_prob_spam = count_spam/len(X_training)  # 0.3939
 prior_prob_not_spam = count_not_spam/len(X_training)  # 0.6060
 

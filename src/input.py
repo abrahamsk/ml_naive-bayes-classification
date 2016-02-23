@@ -7,10 +7,9 @@
 # 2/25/16
 
 import pandas as pd
-from sklearn import preprocessing
 import numpy as np
 
-# Use all the data (4,601 instances). The full data set has approximately 40% spam, 60% not-spam #
+# Use all the data (4601 instances). The full data set has approximately 40% spam, 60% not-spam #
 
 # read in spambase data to a pandas dataframe
 df = pd.read_csv('/Users/katieabrahams/PycharmProjects/machinelearningHW4/src/spambase/spambase.data', header=None)
@@ -37,22 +36,26 @@ df_neg = (df.loc[df[57] == 0])
 frames_training = [df_pos[0:906], df_neg[0:1394]]
 df_training = pd.concat(frames_training)
 df_training = df_training.reset_index(drop=True)
+# split in pos and neg get means and standard deviations
+df_train_pos = (df.loc[df_training[57] == 1])
+df_train_neg = (df.loc[df_training[57] == 0])
+# For each of the 57 features, compute the mean and standard deviation
+# in the training set of the values given each class.
+means = df_train_pos[:,0:57].mean(axis = 0)
+std_devs = df_train_neg[:,0:57].std(axis = 0)
 
 # test data
 frames_test = [df_pos[906:1812], df_neg[1394:2788]]
 df_test = pd.concat(frames_test)
 df_test = df_test.reset_index(drop=True)
 # print df_training  # (2300, 58)
-# print df_test.shape  # (2300, 58)
+# print df_test  # (2300, 58)
 
 # convert dataframes into a numpy matrix
 X_training = df_training.as_matrix().astype(np.float)
-X_test = df_test.as_matrix().astype(np.float)
-
-###########################################################################
-
-# shuffle training data #
-# frac=1 means return all rows in random order
-# df_training = df_training.sample(frac=1).reset_index(drop=True)
-
-###########################################################################
+X_test = df_test.as_matrix().astype(np.float)  # (2300, 58)
+# test data without classifier
+X_test_features = X_test[:,:57].copy()  # (2300, 57)
+X_test_classifier = X_test[:,57]  # (2300,)
+# make classifier into a column
+X_test_col = X_test_classifier[None].T  # (2300, 1)
