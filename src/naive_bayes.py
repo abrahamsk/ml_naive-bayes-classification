@@ -6,6 +6,7 @@
 # Katie Abrahams, abrahake@pdx.edu
 # 2/25/16
 
+from __future__ import division
 from probabilistic_model import *
 import math
 # import timing
@@ -48,7 +49,7 @@ def gaussian_probability(x, mean, std_dev):
     if (std_dev == 0.0):
         std_dev = .01
 
-    # avoid domain errors by using log rule:
+    # avoid math domain errors by using log rule:
     # log(a/b) == log(b)-log(a)
     exp = math.exp(-(math.pow(x - mean, 2) / (2 * math.pow(std_dev, 2))))
     denominator = (math.sqrt(2 * math.pi) * std_dev)
@@ -56,13 +57,6 @@ def gaussian_probability(x, mean, std_dev):
         return exp - math.log(denominator)
     else:
         return math.log(exp) - math.log(denominator) * exp
-
-
-def predict_class():
-    """
-    Predict one row in test data
-    :return:
-    """
 
 
 def predict_all():
@@ -73,39 +67,6 @@ def predict_all():
     Calculate argmax for spam and not spam classes
     :return list of class predictions:
     """
-    ################################################
-    # SCRATCH
-    #
-    # print X_test_features.dtype  # float64
-    # for row in X_test_features:
-    #     for i in row:
-    #         print i
-    # print X_test_features
-    #
-    # for row in X_test_features:
-    #     for i in row:
-    #         print row, i
-
-    # print range(57) # 0 - 56
-    # print range(len(pos_means_training)) # 0 - 56
-    # print range(len(X_test_features)) # 0 - 2299
-
-    # count_row = 0
-    # count_i = 0
-    # for row in X_test_features:
-    #     for i in range(len(row)): # 0 - 56
-    #         count_i += 1
-    #     count_row += 1
-    # print count_row # 2300
-    # print count_i # 131100
-
-    # for row in X_test_features:
-    #     for i in row:
-    #         print row, i
-
-    # for row in range(len(X_test_features)):
-    #     print len(X_test_features[row])
-    ################################################
 
     # use math.log (base e)
     # use logs and sums rather than products when computing prediction
@@ -115,6 +76,7 @@ def predict_all():
         probabilities_pos = []
         probabilities_neg = []
         for i in range(len(X_test_features[row])):
+            # log moved to inside gaussian_probability function
             probability_log_pos = gaussian_probability(X_test_features[row,i], pos_means_training[i], pos_std_devs_training[i])
             probabilities_pos.append(probability_log_pos)
 
@@ -133,18 +95,36 @@ def predict_all():
     return classes
 
 
-# def getPredictions(summaries, testSet):
-# 	predictions = []
-# 	for i in range(len(testSet)):
-# 		result = predict(summaries, testSet[i])
-# 		predictions.append(result)
-# 	return predictions
+def get_stats():
+    """
+    Get stats for test data classifications
+    :return:
+    """
+    # predict classes for spam test data
+    predictions = predict_all()
+    # count_pos = 0
+    # count_neg = 0
+    # for i in predictions:
+    #     if i == 1.0:
+    #         count_pos += 1
+    #     else:
+    #         count_neg += 1
+    # print "positive: ", count_pos, "negative: ", count_neg
+
+    correct_predictions = 0
+    # print [(i,j) for i,j in zip(X_test_classifier, predictions) if i != j]
+    for i,j in zip(X_test_classifier, predictions):
+        if i==j:
+            correct_predictions += 1
+    accuracy = correct_predictions / len(X_test_features)
+    print "----- Accuracy across the test set -----\n", accuracy, "\nCorrect predictions / 2300 =", \
+        correct_predictions, "\n----------------------------------------"
 
 #######################################################################
 
 def main():
-    # predict classes for spam test data
-    predict_all()
+    # get stats for test data
+    get_stats()
 
 
 if __name__ == "__main__":
