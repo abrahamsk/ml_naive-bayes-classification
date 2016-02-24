@@ -9,6 +9,7 @@
 from __future__ import division
 from probabilistic_model import *
 import math
+from sklearn import metrics
 # import timing
 
 """
@@ -106,15 +107,39 @@ def get_stats():
     # predict classes for spam test data with predict_all()
     predictions = predict_all()
 
-    # print stats
+    # collect and print stats for test data classification
     correct_predictions = 0
+    true_pos = 0
+    false_pos = 0
+    false_neg = 0
     # print [(i,j) for i,j in zip(X_test_classifier, predictions) if i != j]
     for i,j in zip(X_test_classifier, predictions):
+        # accuracy
         if i==j:
             correct_predictions += 1
+        # true positives
+        if i == 1.0 and j == 1.0:
+            true_pos += 1
+        # false positives (classified pos, really negative)
+        if i == 0.0 and j == 1.0: # i = true value, j = prediction
+            false_pos += 1
+        # false negatives (classified neg, really pos)
+        if i == 1.0 and j == 0.0: # i = true value, j = prediction
+            false_neg += 1
+
+    # Accuracy = fraction of correct classifications on unseen data (test set)
     accuracy = correct_predictions / len(X_test_features)
     print "----- Accuracy across the test set -----\n", accuracy, "\nCorrect predictions / 2300 =", \
         correct_predictions, "\n----------------------------------------"
+
+    # Precision = TP/(TP+FP)
+
+    # Recall = TP / (TP+FN)
+
+    # confusion matrix
+    print "\n----- Confusion matrix -----"
+    print metrics.confusion_matrix(X_test_classifier, predictions)
+    print "----------------------------"
 
 #######################################################################
 
