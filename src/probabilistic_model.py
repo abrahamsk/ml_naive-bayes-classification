@@ -16,6 +16,7 @@ As described in part 1, P(1) should be about 0.4.
 
 B) For each of the 57 features, compute the mean and standard deviation in the training set
 of the values given each class.
+-See input.py for mean and standard dev calculations
 
 Training data information includes mean and std dev for each of the 57 attributes
 and 2 possible class values, for a total of 114 (57*2)
@@ -39,15 +40,6 @@ for row in X_training:
 prior_prob_spam = count_spam/len(X_training)  # 0.3939
 prior_prob_not_spam = count_not_spam/len(X_training)  # 0.6060
 
-#######################################################################
-
-# B)
-# For each of the 57 features, compute the mean and standard deviation
-# in the training set of the values given each class.
-# means = np.mean(X_training[:,0:57], axis = 0)
-# std_devs = np.std(X_training[:,0:57], axis = 0)
-# >> moved to input.py
-#######################################################################
 
 
 
