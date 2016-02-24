@@ -43,10 +43,19 @@ def gaussian_probability(x, mean, std_dev):
     :param std_dev:
     :return:
     """
-    if std_dev == 0:
+
+    # catch div by zero errors
+    if (std_dev == 0.0):
         std_dev = .01
+
+    # avoid domain errors by using log rule:
+    # log(a/b) == log(b)-log(a)
     exp = math.exp(-(math.pow(x - mean, 2) / (2 * math.pow(std_dev, 2))))
-    return (1 / (math.sqrt(2 * math.pi) * std_dev)) * exp
+    denominator = (math.sqrt(2 * math.pi) * std_dev)
+    if (exp == 0.0):
+        return exp - math.log(denominator)
+    else:
+        return math.log(exp) - math.log(denominator) * exp
 
 
 def predict_class():
@@ -106,13 +115,10 @@ def predict_all():
         probabilities_pos = []
         probabilities_neg = []
         for i in range(len(X_test_features[row])):
-            probability_log_pos = math.log(
-                gaussian_probability(X_test_features[row,i], pos_means_training[i], pos_std_devs_training[i]))
-            # print probability_log
+            probability_log_pos = gaussian_probability(X_test_features[row,i], pos_means_training[i], pos_std_devs_training[i])
             probabilities_pos.append(probability_log_pos)
 
-            probability_log_neg = math.log(
-                gaussian_probability(X_test_features[row,i], neg_means_training[i], neg_std_devs_training[i]))
+            probability_log_neg = gaussian_probability(X_test_features[row,i], neg_means_training[i], neg_std_devs_training[i])
             probabilities_neg.append(probability_log_neg)
 
         predict_spam = math.log(prior_prob_spam) + sum(probabilities_pos)
