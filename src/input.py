@@ -67,6 +67,7 @@ X_training = df_training.as_matrix().astype(np.float)
 X_test = df_test.as_matrix().astype(np.float)  # (2300, 58)
 # test data without classifier
 X_test_features = X_test[:,:57].copy()  # (2300, 57)
+# use classifier data in naive bayes to compute accuracy, precision, and recall (using false pos and false neg)
 X_test_classifier = X_test[:,57]  # (2300,)
 # make classifier into a column
 X_test_col = X_test_classifier[None].T  # (2300, 1)

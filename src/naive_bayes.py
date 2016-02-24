@@ -108,10 +108,11 @@ def get_stats():
     predictions = predict_all()
 
     # collect and print stats for test data classification
-    correct_predictions = 0
     true_pos = 0
+    true_neg = 0
     false_pos = 0
     false_neg = 0
+    correct_predictions = 0
     # print [(i,j) for i,j in zip(X_test_classifier, predictions) if i != j]
     for i,j in zip(X_test_classifier, predictions):
         # accuracy
@@ -120,6 +121,9 @@ def get_stats():
         # true positives
         if i == 1.0 and j == 1.0:
             true_pos += 1
+        # true neg
+        if i == 0.0 and j == 0.0:
+            true_neg += 1
         # false positives (classified pos, really negative)
         if i == 0.0 and j == 1.0: # i = true value, j = prediction
             false_pos += 1
@@ -132,14 +136,24 @@ def get_stats():
     print "----- Accuracy across the test set -----\n", accuracy, "\nCorrect predictions / 2300 =", \
         correct_predictions, "\n----------------------------------------"
 
-    # Precision = TP/(TP+FP)
-
-    # Recall = TP / (TP+FN)
-
     # confusion matrix
     print "\n----- Confusion matrix -----"
-    print metrics.confusion_matrix(X_test_classifier, predictions)
+    print "              Predicted"
+    print "A          Spam    Not spam  "
+    print "c         _______________"
+    print "t  Spam  | ", true_pos," | ", false_neg, "  | "
+    print "u        |_______|_______|"
+    print "a  Not   | ", false_pos," | ", true_neg, " | "
+    print "l  spam  |_______|_______|"
     print "----------------------------"
+
+    # Precision = TP/(TP+FP)
+    precision = true_pos / (true_pos+false_pos)
+    print "\n----- Precision -----\n", precision, "\n---------------------"
+
+    # Recall = TP / (TP+FN)
+    recall = true_pos / (true_pos+false_neg)
+    print "\n----- Recall -----\n", recall, "\n------------------"
 
 #######################################################################
 
