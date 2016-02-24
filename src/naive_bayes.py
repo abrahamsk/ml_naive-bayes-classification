@@ -43,7 +43,7 @@ def gaussian_probability(x, mean, std_dev):
     :param std_dev:
     :return:
     """
-    if (std_dev == 0):
+    if std_dev == 0:
         std_dev = .01
     exp = math.exp(-(math.pow(x - mean, 2) / (2 * math.pow(std_dev, 2))))
     return (1 / (math.sqrt(2 * math.pi) * std_dev)) * exp
@@ -89,38 +89,37 @@ def predict_all():
     #     count_row += 1
     # print count_row # 2300
     # print count_i # 131100
-    ################################################
 
     # for row in X_test_features:
     #     for i in row:
     #         print row, i
 
+    # for row in range(len(X_test_features)):
+    #     print len(X_test_features[row])
+    ################################################
+
     # use math.log (base e)
     # use logs and sums rather than products when computing prediction
     classes = []
     # predict class for each row in test features matrix
-    for row in X_test_features:
+    for row in range(len(X_test_features)):
         probabilities_pos = []
         probabilities_neg = []
-        prediction = []
-        for i in range(len(row)):
+        for i in range(len(X_test_features[row])):
             probabilities_pos.append(math.log(
-                gaussian_probability(X_test_features[i], pos_means_training[i], pos_std_devs_training[i])))
+                gaussian_probability(X_test_features[row,i], pos_means_training[i], pos_std_devs_training[i])))
 
             probabilities_neg.append(math.log(
-                gaussian_probability(X_test_features[row, i], neg_means_training[i], neg_std_devs_training[i])))
+                gaussian_probability(X_test_features[row,i], neg_means_training[i], neg_std_devs_training[i])))
 
         predict_spam = math.log(prior_prob_spam) + sum(probabilities_pos)
         predict_not_spam = math.log(prior_prob_not_spam) + sum(probabilities_neg)
 
         # assign class based on argmax
-        if (predict_spam > predict_not_spam):
+        if predict_spam > predict_not_spam:
             classes.append(1.0)
         else:
             classes.append(0.0)
-        # prediction.append(predict_spam, predict_not_spam)
-        # class_nb = max(prediction)
-        # classes.append(class_nb)
 
     return classes
 
