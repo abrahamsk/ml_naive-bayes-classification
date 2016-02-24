@@ -95,6 +95,8 @@ Temporary Items
 
 ## Directory-based project format:
 .idea/
+
+.idea/dictionaries
 # if you remove the above rule, at least ignore the following:
 
 # User-specific stuff:
