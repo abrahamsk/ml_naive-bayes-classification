@@ -13,6 +13,9 @@ import numpy as np
 
 # read in spambase data to a pandas dataframe
 df = pd.read_csv('/Users/katieabrahams/PycharmProjects/machinelearningHW4/src/spambase/spambase.data', header=None)
+# shuffling to test data across multiple data configurations when rerunning
+df = df.sample(frac=1).reset_index(drop=True)
+
 """
 1. Create training and test set:
 Split the data into a training and test set. Each of these should have about 2,300 instances,

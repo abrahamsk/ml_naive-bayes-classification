@@ -70,11 +70,12 @@ def predict_all():
 
     # use math.log (base e)
     # use logs and sums rather than products when computing prediction
-    classes = []
+    predictions = []
     # predict class for each row in test features matrix
     for row in range(len(X_test_features)):
         probabilities_pos = []
         probabilities_neg = []
+        # for each item in the instance row (for each feature), calculate gaussian probability using N function
         for i in range(len(X_test_features[row])):
             # log moved to inside gaussian_probability function
             probability_log_pos = gaussian_probability(X_test_features[row,i], pos_means_training[i], pos_std_devs_training[i])
@@ -83,16 +84,18 @@ def predict_all():
             probability_log_neg = gaussian_probability(X_test_features[row,i], neg_means_training[i], neg_std_devs_training[i])
             probabilities_neg.append(probability_log_neg)
 
+        # get prediction for positive and negative classes
+        # by summing log of prior probability and sum of gaussian prob for each feature (done above)
         predict_spam = math.log(prior_prob_spam) + sum(probabilities_pos)
         predict_not_spam = math.log(prior_prob_not_spam) + sum(probabilities_neg)
 
-        # assign class based on argmax
+        # assign class prediction based on argmax of positive (spam) and negative (not spam)
         if predict_spam > predict_not_spam:
-            classes.append(1.0)
+            predictions.append(1.0)
         else:
-            classes.append(0.0)
-
-    return classes
+            predictions.append(0.0)
+    # return list of predictions for spam/not spam for all instances in test set
+    return predictions
 
 
 def get_stats():
@@ -100,17 +103,10 @@ def get_stats():
     Get stats for test data classifications
     :return:
     """
-    # predict classes for spam test data
+    # predict classes for spam test data with predict_all()
     predictions = predict_all()
-    # count_pos = 0
-    # count_neg = 0
-    # for i in predictions:
-    #     if i == 1.0:
-    #         count_pos += 1
-    #     else:
-    #         count_neg += 1
-    # print "positive: ", count_pos, "negative: ", count_neg
 
+    # print stats
     correct_predictions = 0
     # print [(i,j) for i,j in zip(X_test_classifier, predictions) if i != j]
     for i,j in zip(X_test_classifier, predictions):
