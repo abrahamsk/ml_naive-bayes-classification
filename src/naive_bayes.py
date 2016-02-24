@@ -106,11 +106,14 @@ def predict_all():
         probabilities_pos = []
         probabilities_neg = []
         for i in range(len(X_test_features[row])):
-            probabilities_pos.append(math.log(
-                gaussian_probability(X_test_features[row,i], pos_means_training[i], pos_std_devs_training[i])))
+            probability_log_pos = math.log(
+                gaussian_probability(X_test_features[row,i], pos_means_training[i], pos_std_devs_training[i]))
+            # print probability_log
+            probabilities_pos.append(probability_log_pos)
 
-            probabilities_neg.append(math.log(
-                gaussian_probability(X_test_features[row,i], neg_means_training[i], neg_std_devs_training[i])))
+            probability_log_neg = math.log(
+                gaussian_probability(X_test_features[row,i], neg_means_training[i], neg_std_devs_training[i]))
+            probabilities_neg.append(probability_log_neg)
 
         predict_spam = math.log(prior_prob_spam) + sum(probabilities_pos)
         predict_not_spam = math.log(prior_prob_not_spam) + sum(probabilities_neg)
