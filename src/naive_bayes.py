@@ -64,24 +64,64 @@ def predict_all():
     Calculate argmax for spam and not spam classes
     :return list of class predictions:
     """
-    # store the test data predictions
+    ################################################
+    # SCRATCH
+    #
+    # print X_test_features.dtype  # float64
+    # for row in X_test_features:
+    #     for i in row:
+    #         print i
+    # print X_test_features
+    #
+    # for row in X_test_features:
+    #     for i in row:
+    #         print row, i
+
+    # print range(57) # 0 - 56
+    # print range(len(pos_means_training)) # 0 - 56
+    # print range(len(X_test_features)) # 0 - 2299
+
+    # count_row = 0
+    # count_i = 0
+    # for row in X_test_features:
+    #     for i in range(len(row)): # 0 - 56
+    #         count_i += 1
+    #     count_row += 1
+    # print count_row # 2300
+    # print count_i # 131100
+    ################################################
+
+    # for row in X_test_features:
+    #     for i in row:
+    #         print row, i
+
+    # use math.log (base e)
+    # use logs and sums rather than products when computing prediction
     classes = []
-    for i in range(len(X_test_features)):
+    # predict class for each row in test features matrix
+    for row in X_test_features:
+        probabilities_pos = []
+        probabilities_neg = []
         prediction = []
-        sum_probabilities_pos = [
-            np.log10(gaussian_probability(X_test_features[i][j], pos_means_training[i], pos_std_devs_training[i])) for j
-            in X_test_features[i][j]]
-        sum_probabilities_neg = [
-            np.log10(gaussian_probability(X_test_features[i][j], neg_means_training[i], pos_means_training[i])) for j
-            in X_test_features[i][j]]
+        for i in range(len(row)):
+            probabilities_pos.append(math.log(
+                gaussian_probability(X_test_features[i], pos_means_training[i], pos_std_devs_training[i])))
 
-        predict_spam = np.log10(prior_prob_spam) * sum_probabilities_pos
+            probabilities_neg.append(math.log(
+                gaussian_probability(X_test_features[row, i], neg_means_training[i], neg_std_devs_training[i])))
 
-        predict_not_spam = np.log10(prior_prob_not_spam) * sum_probabilities_neg
+        predict_spam = math.log(prior_prob_spam) + sum(probabilities_pos)
+        predict_not_spam = math.log(prior_prob_not_spam) + sum(probabilities_neg)
 
-        prediction.append(predict_spam, predict_not_spam)
-        class_nb = max(prediction)
-        classes.append(class_nb)
+        # assign class based on argmax
+        if (predict_spam > predict_not_spam):
+            classes.append(1.0)
+        else:
+            classes.append(0.0)
+        # prediction.append(predict_spam, predict_not_spam)
+        # class_nb = max(prediction)
+        # classes.append(class_nb)
+
     return classes
 
 

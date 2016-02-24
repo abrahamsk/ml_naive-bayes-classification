@@ -41,7 +41,8 @@ df_training = df_training.reset_index(drop=True)
 df_train_pos = (df_training.loc[df_training[57] == 1])
 df_train_neg = (df_training.loc[df_training[57] == 0])
 # For each of the 57 features, compute the mean and standard deviation
-# in the training set of the values given each class.
+# in the training set of the values given each class
+# convert to numpy matrix for computations
 train_pos_intermed = df_train_pos.as_matrix().astype(np.float)
 train_neg_intermed = df_train_neg.as_matrix().astype(np.float)
 # positive stats
